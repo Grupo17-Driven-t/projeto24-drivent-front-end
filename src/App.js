@@ -1,10 +1,6 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { useState } from 'react';
 
 import Countdown from './pages/Countdown';
 import Enroll from './pages/Enroll';
@@ -18,6 +14,7 @@ import Certificate from './pages/Dashboard/Certificate';
 
 import { EventInfoProvider } from './contexts/EventInfoContext';
 import { UserProvider } from './contexts/UserContext';
+import { TicketProvider } from './contexts/TicketContext';
 
 import useToken from './hooks/useToken';
 
@@ -27,29 +24,31 @@ export default function App() {
       <ToastContainer />
       <EventInfoProvider>
         <UserProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<Countdown />} />
-              <Route path="/enroll" element={<Enroll />} />
-              <Route path="/sign-in" element={<SignIn />} />
+          <TicketProvider>
+            <Router>
+              <Routes>
+                <Route path="/" element={<Countdown />} />
+                <Route path="/enroll" element={<Enroll />} />
+                <Route path="/sign-in" element={<SignIn />} />
 
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRouteGuard>
-                    <Dashboard />
-                  </ProtectedRouteGuard>
-                }
-              >
-                <Route path="subscription" element={<FillSubscription />} />
-                <Route path="payment" element={<Payment />} />
-                <Route path="hotel" element={<Hotel />} />
-                <Route path="activities" element={<Activities />} />
-                <Route path="certificate" element={<Certificate />} />
-                <Route index path="*" element={<Navigate to="/dashboard/subscription" />} />
-              </Route>
-            </Routes>
-          </Router>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRouteGuard>
+                      <Dashboard />
+                    </ProtectedRouteGuard>
+                  }
+                >
+                  <Route path="subscription" element={<FillSubscription />} />
+                  <Route path="payment" element={<Payment />} />
+                  <Route path="hotel" element={<Hotel />} />
+                  <Route path="activities" element={<Activities />} />
+                  <Route path="certificate" element={<Certificate />} />
+                  <Route index path="*" element={<Navigate to="/dashboard/subscription" />} />
+                </Route>
+              </Routes>
+            </Router>
+          </TicketProvider>
         </UserProvider>
       </EventInfoProvider>
     </>
@@ -63,7 +62,5 @@ function ProtectedRouteGuard({ children }) {
     return <Navigate to="/sign-in" />;
   }
 
-  return <>
-    {children}
-  </>;
+  return <>{children}</>;
 }

@@ -5,6 +5,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 import Cards from 'react-credit-cards';
 import { creditCard } from '../../../services/payment';
 import useToken from '../../../hooks/useToken';
+import { DebounceInput } from 'react-debounce-input';
 
 export default function Payment() {
   const [choosed, setChoosed] = useState(true);

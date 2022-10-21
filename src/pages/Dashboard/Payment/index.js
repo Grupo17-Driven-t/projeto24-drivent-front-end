@@ -1,9 +1,29 @@
 import AccommodationsOptions from '../../../components/Payment/Accommodation';
 import { useState } from 'react';
 import styled from 'styled-components';
+import 'react-credit-cards/es/styles-compiled.css';
+import Cards from 'react-credit-cards';
 
 export default function Payment() {
   const [choosed, setChoosed] = useState(true);
+  const [ticketInfo, setInfo] = useState({ type: 'Presencial + Com Hotel', price: '600' });
+  const [number, setNumber] = useState('');
+  const [name, setName] = useState('');
+  const [cvc, setCvc] = useState('');
+  const [expiry, setExpiry] = useState('');
+
+  function cardNumber(event) {
+    if(event.length === 4) {
+      event+= ' ';
+      setNumber(event);
+    }else if(event.length === 9) {
+      event+= ' ';
+      setNumber(event);
+    }else if(event.length === 14) { 
+      event+= ' ';
+      setNumber(event);
+    } else setNumber(event);
+  };
 
   return (
     <Container>
@@ -11,12 +31,69 @@ export default function Payment() {
       <AccommodationsOptions showAccommodations={ false } />
       <h3>{choosed ? ('Ingresso escolhido') : ('Primeiro, escolha sua modalidade de ingresso')}</h3>
 
-      <ChoosedTicket>
-        <h4>Presencial + Com Hotel</h4>
-        <h5>R$600</h5>
-      </ChoosedTicket>
+      {choosed ? (
+        <ChoosedTicket>
+          <h4>{ticketInfo.type}</h4>
+          <h5>R${ticketInfo.price}</h5>
+        </ChoosedTicket>
+      ) : ('') }
 
       <h3>Pagamento</h3>
+      
+      <Card>
+        <Cards
+          cvc={cvc}
+          expiry={expiry}
+          focused=''
+          name={name}
+          number={number}
+          rccs-background-transition=  '0.5s ease-out'
+          rccs-animate-background= 'true'
+        />
+        <form>
+          <CardInfo>
+            <input
+              type="tel"
+              placeholder="Card Number"
+              value={number}
+              onChange={event => cardNumber(event.target.value)}
+              onFocus=''
+              maxlength="19"
+              required
+            />
+            <h6>Ex: 49...,51...,36...,37...</h6>
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={event => setName(event.target.value)}
+              onFocus=''
+              required
+            />
+            <ShortInputs>
+              <input
+                type="text"
+                placeholder="Valid Thru"
+                value={expiry}
+                onChange={event => setExpiry(event.target.value)}
+                onFocus=''
+                maxlength="5"
+                required
+              />
+              <input
+                id='cvc'
+                type="text"
+                placeholder="CVC"
+                value={cvc}
+                onChange={event => setCvc(event.target.value)}
+                onFocus=''
+                maxlength="3"
+                required
+              />
+            </ShortInputs>
+          </CardInfo>
+        </form>
+      </Card>
 
       <Finish>FINALIZAR PAGAMENTO</Finish>
     </Container>
@@ -34,6 +111,12 @@ const Container = styled.div`
     font-size: 20px;
     color: #8e8e8e;
     margin-top: 30px;
+  }
+
+  h6 { 
+    margin: 8px 0px 10px 3px;
+    color: #B3B4B4;
+    font-size: 18px
   }
 `;
 const ChoosedTicket = styled.div`
@@ -93,6 +176,41 @@ const Finish = styled.div`
   &:active {  
       transform: scale(0.98);
       box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+  }
+`;
+const Card = styled.div`
+  width: 30%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 30px;
+
+  form { 
+    margin-left: 30px;
+  }
+
+`;
+const CardInfo = styled.div`
+  input { 
+    width: 270px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #5D5D5D;
+    padding-left: 10px;
+    font-size: 18px;
+  }
+`;
+const ShortInputs = styled.div`
+  margin-top: 10px;
+  display: flex;
+
+  input { 
+    width: 160px;
+  }
+
+  input#cvc { 
+    margin-left: 10px;
+    width : 100px;
   }
 `;
 

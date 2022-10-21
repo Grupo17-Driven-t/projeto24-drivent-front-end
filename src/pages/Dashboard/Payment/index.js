@@ -14,6 +14,7 @@ export default function Payment() {
   const [cvc, setCvc] = useState('');
   const [expiry, setExpiry] = useState('');
   const token = useToken();
+  const [dots, setDots] = useState(false);
 
   function cardNumber(event) {
     if(event.length === 4) {

@@ -3,6 +3,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import 'react-credit-cards/es/styles-compiled.css';
 import Cards from 'react-credit-cards';
+import { creditCard } from '../../../services/payment';
+import useToken from '../../../hooks/useToken';
 
 export default function Payment() {
   const [choosed, setChoosed] = useState(true);
@@ -11,6 +13,7 @@ export default function Payment() {
   const [name, setName] = useState('');
   const [cvc, setCvc] = useState('');
   const [expiry, setExpiry] = useState('');
+  const token = useToken();
 
   function cardNumber(event) {
     if(event.length === 4) {
@@ -27,6 +30,7 @@ export default function Payment() {
 
   function securityCode(event) { 
     const type = Number(event);
+    // eslint-disable-next-line no-console
     console.log(type);
 
     if(type !== isNaN) setCvc(event);
@@ -37,6 +41,26 @@ export default function Payment() {
       event+='/';
       setExpiry(event);
     } else setExpiry(event);
+  }
+
+  async function submit() { 
+    const cardInfo = {
+      number,
+      name, 
+      validDate: expiry,
+      cvc
+    };
+
+    try {
+      const promise = await creditCard(cardInfo, token);
+      setNumber('');
+      setName('');
+      setExpiry('');
+      setCvc('');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
   }
 
   return (
@@ -109,7 +133,7 @@ export default function Payment() {
         </form>
       </Card>
 
-      <Finish>FINALIZAR PAGAMENTO</Finish>
+      <Finish onClick={submit}>FINALIZAR PAGAMENTO</Finish>
     </Container>
   );
 }

@@ -25,6 +25,20 @@ export default function Payment() {
     } else setNumber(event);
   };
 
+  function securityCode(event) { 
+    const type = Number(event);
+    console.log(type);
+
+    if(type !== isNaN) setCvc(event);
+  }
+
+  function validThru(event) { 
+    if(event.length === 2) {
+      event+='/';
+      setExpiry(event);
+    } else setExpiry(event);
+  }
+
   return (
     <Container>
       <h2>Ingresso e pagamento</h2>
@@ -75,7 +89,7 @@ export default function Payment() {
                 type="text"
                 placeholder="Valid Thru"
                 value={expiry}
-                onChange={event => setExpiry(event.target.value)}
+                onChange={event => validThru(event.target.value)}
                 onFocus=''
                 maxlength="5"
                 required
@@ -85,7 +99,7 @@ export default function Payment() {
                 type="text"
                 placeholder="CVC"
                 value={cvc}
-                onChange={event => setCvc(event.target.value)}
+                onChange={event => securityCode(event.target.value)}
                 onFocus=''
                 maxlength="3"
                 required

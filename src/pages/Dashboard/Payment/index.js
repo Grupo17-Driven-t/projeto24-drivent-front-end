@@ -2,6 +2,6 @@ import AccommodationsOptions from '../../../components/Payment/Accommodation';
 
 export default function Payment() {
   return (
-    <AccommodationsOptions />
+    <AccommodationsOptions showAccommodations={ false } />
   );
 }

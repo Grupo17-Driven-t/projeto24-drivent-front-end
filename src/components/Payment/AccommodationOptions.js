@@ -48,7 +48,7 @@ function AccommodationsOptions() {
   }
 
   return (
-    <OptionsContainer>
+    <OptionsContainer >
       <OptionContainer onClick={ () => selectAccommodation('noneHotel') } selected={ isOptionAccommodationSelected('noneHotel') } >
         <p>Sem Hotel</p>
         <p><span>+ R$ 0</span></p>

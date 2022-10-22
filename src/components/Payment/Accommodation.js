@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import AccommodationsOptions from './AccommodationOptions';
 
-function Accommodation() {
+function Accommodation({ showAccommodations }) {
   return (
-    <AccommodationsContent>
+    <AccommodationsContent showAccommodations={ showAccommodations} >
       <HotelTitle>Ótimo! Agora escolha sua modalidade de hospedagem</HotelTitle>
       <AccommodationsOptions />
     </AccommodationsContent>
@@ -11,7 +11,7 @@ function Accommodation() {
 }
 
 const AccommodationsContent = styled.div`
-  display: flex;
+  display: ${(props) => props.showAccommodations ? 'flex' : 'none' };
   flex-direction: column;
 `;
 

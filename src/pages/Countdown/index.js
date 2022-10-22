@@ -23,9 +23,6 @@ export default function Countdown() {
     navigate('/enroll');
   }
 
-  console.log(loadingEventInfo);
-  console.log(eventInfo);
-
   if (loadingEventInfo) {
     return 'Loading...';
   }

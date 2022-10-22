@@ -1,3 +1,7 @@
+import AccommodationsOptions from '../../../components/Payment/Accommodation';
+
 export default function Payment() {
-  return 'Pagamento: Em breve!';
+  return (
+    <AccommodationsOptions />
+  );
 }

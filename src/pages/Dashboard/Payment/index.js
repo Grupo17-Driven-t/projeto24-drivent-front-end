@@ -5,7 +5,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 import Cards from 'react-credit-cards';
 import { creditCard } from '../../../services/payment';
 import useToken from '../../../hooks/useToken';
-import { DebounceInput } from 'react-debounce-input';
+import { ThreeDots } from 'react-loader-spinner';
 
 export default function Payment() {
   const [choosed, setChoosed] = useState(true);
@@ -16,6 +16,7 @@ export default function Payment() {
   const [expiry, setExpiry] = useState('');
   const token = useToken();
   const [dots, setDots] = useState(false);
+  const [focus, setFocus] = useState(true);
 
   function cardNumber(event) {
     if(event.length === 4) {
@@ -54,14 +55,19 @@ export default function Payment() {
     };
 
     try {
-      const promise = await creditCard(cardInfo, token);
+      setDots(true);
+      await creditCard(cardInfo, token);
       setNumber('');
       setName('');
       setExpiry('');
       setCvc('');
+      setDots(false);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
+      setTimeout(() => {
+        setDots(false);
+      }, 2000);
     }
   }
 
@@ -84,7 +90,7 @@ export default function Payment() {
         <Cards
           cvc={cvc}
           expiry={expiry}
-          focused=''
+          focused={focus}
           name={name}
           number={number}
           rccs-background-transition=  '0.5s ease-out'
@@ -97,7 +103,6 @@ export default function Payment() {
               placeholder="Card Number"
               value={number}
               onChange={event => cardNumber(event.target.value)}
-              onFocus=''
               maxlength="19"
               required
             />
@@ -107,7 +112,6 @@ export default function Payment() {
               placeholder="Name"
               value={name}
               onChange={event => setName(event.target.value)}
-              onFocus=''
               required
             />
             <ShortInputs>
@@ -116,7 +120,6 @@ export default function Payment() {
                 placeholder="Valid Thru"
                 value={expiry}
                 onChange={event => validThru(event.target.value)}
-                onFocus=''
                 maxlength="5"
                 required
               />
@@ -126,7 +129,7 @@ export default function Payment() {
                 placeholder="CVC"
                 value={cvc}
                 onChange={event => securityCode(event.target.value)}
-                onFocus=''
+                onClick={() => setFocus(true)}
                 maxlength="3"
                 required
               />
@@ -135,7 +138,9 @@ export default function Payment() {
         </form>
       </Card>
 
-      <Finish onClick={submit}>FINALIZAR PAGAMENTO</Finish>
+      <Finish onClick={submit}>
+        {dots ? ('ThreeDots') : ('FINALIZAR PAGAMENTO')}
+      </Finish>
     </Container>
   );
 }

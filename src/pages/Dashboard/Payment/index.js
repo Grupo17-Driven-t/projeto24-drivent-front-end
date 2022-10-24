@@ -8,8 +8,7 @@ import useToken from '../../../hooks/useToken';
 import { ThreeDots } from 'react-loader-spinner';
 
 export default function Payment() {
-  const [choosed, setChoosed] = useState(true);
-  const [ticketInfo, setInfo] = useState({ type: 'Presencial + Com Hotel', price: '600' });
+  const [ticketInfo, setInfo] = useState([ { type: 'presencial', price: 100 }, { type: 'withHotel', price: 100 }]);
   const [number, setNumber] = useState('');
   const [name, setName] = useState('');
   const [cvc, setCvc] = useState('');
@@ -17,6 +16,21 @@ export default function Payment() {
   const token = useToken();
   const [dots, setDots] = useState(false);
   const [focus, setFocus] = useState(true);
+  const [choosed, setChoosed] = useState(false);
+
+  function price() { 
+    let price = 0;
+    if(ticketInfo[0].type === 'online') { 
+      price = ticketInfo[0].price;
+      return price;
+    } else if(ticketInfo[1].type === 'noneHotel') { 
+      price = ticketInfo[0].price;
+      return price;
+    } else { 
+      price = ticketInfo[0].price + ticketInfo[1].price;
+      return price;
+    }
+  }
 
   function cardNumber(event) {
     if(event.length === 4) {
@@ -32,18 +46,21 @@ export default function Payment() {
   };
 
   function securityCode(event) { 
-    const type = Number(event);
+    const type = typeof event;
     // eslint-disable-next-line no-console
     console.log(type);
 
-    if(type !== isNaN) setCvc(event);
+    if(type === 'number') setCvc(event);
   }
 
   function validThru(event) { 
-    if(event.length === 2) {
-      event+='/';
-      setExpiry(event);
-    } else setExpiry(event);
+    const type = typeof event;
+    if(type === 'number') {
+      if(event.length === 2) {
+        event+='/';
+        setExpiry(event);
+      } else setExpiry(event);
+    }
   }
 
   async function submit() { 
@@ -77,12 +94,10 @@ export default function Payment() {
       <AccommodationsOptions showAccommodations={ false } />
       <h3>{choosed ? ('Ingresso escolhido') : ('Primeiro, escolha sua modalidade de ingresso')}</h3>
 
-      {choosed ? (
-        <ChoosedTicket>
-          <h4>{ticketInfo.type}</h4>
-          <h5>R${ticketInfo.price}</h5>
-        </ChoosedTicket>
-      ) : ('') }
+      <ChoosedTicket>
+        <h4>{ ticketInfo[0].type === 'presencial' ? (`Presencial + ${ ticketInfo[1].type === 'withHotel' ? ('Com Hotel'):('Sem Hotel')}`) : ('Online')}</h4>
+        <h5>R${price}</h5>
+      </ChoosedTicket>
 
       <h3>Pagamento</h3>
       

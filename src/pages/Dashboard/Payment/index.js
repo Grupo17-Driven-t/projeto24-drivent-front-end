@@ -16,6 +16,7 @@ export default function Payment() {
   const token = useToken();
   const [dots, setDots] = useState(false);
   const [focus, setFocus] = useState(true);
+
   const [choosed, setChoosed] = useState(false);
 
   function price() { 
